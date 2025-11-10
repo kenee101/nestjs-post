@@ -6,7 +6,7 @@ export default new DataSource({
   port: 5432,
   username: 'postgres',
   password: 'Password123#',
-  database: 'nestjs-blog',
+  database: 'nestjs-post',
   entities: ['**/*.entity.js'],
   migrations: ['migrations/*.js'],
 });
