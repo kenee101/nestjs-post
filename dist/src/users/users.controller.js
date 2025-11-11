@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UsersController = void 0;
 const common_1 = require("@nestjs/common");
 const create_user_dto_1 = require("./dtos/create-user.dto");
+const get_users_param_dto_1 = require("./dtos/get-users-param.dto");
 const patch_user_dto_1 = require("./dtos/patch-user.dto");
 const users_service_1 = require("./providers/users.service");
 const swagger_1 = require("@nestjs/swagger");
@@ -26,10 +27,10 @@ let UsersController = class UsersController {
     constructor(usersService) {
         this.usersService = usersService;
     }
-    getUsers(limit, page) {
-        return this.usersService.findAll(limit, page);
+    getUserById(getUsersParamDto) {
+        return this.usersService.find(getUsersParamDto);
     }
-    createUsers(createUserDto) {
+    createUser(createUserDto) {
         return this.usersService.createUser(createUserDto);
     }
     createManyUsers(createManyUsersDto) {
@@ -41,44 +42,27 @@ let UsersController = class UsersController {
 };
 exports.UsersController = UsersController;
 __decorate([
-    (0, common_1.Get)(),
+    (0, common_1.Get)('/:id'),
     (0, common_1.UseInterceptors)(common_1.ClassSerializerInterceptor),
     (0, swagger_1.ApiOperation)({
-        summary: 'Fetches a list of registered users on the application',
+        summary: 'Fetch registered user on the application',
     }),
     (0, swagger_1.ApiResponse)({
         status: 200,
-        description: 'Users fetched successfully based on the query',
-        type: [user_entity_1.User],
-        example: [
-            {
-                id: 1,
-                firstName: 'John',
-                lastName: 'Doe',
-                email: 'john.doe@example.com',
-            },
-        ],
+        description: 'User fetched successfully based on the query',
+        type: user_entity_1.User,
+        example: {
+            id: 1,
+            firstName: 'John',
+            lastName: 'Doe',
+            email: 'john.doe@example.com',
+        },
     }),
-    (0, swagger_1.ApiQuery)({
-        name: 'limit',
-        type: 'number',
-        required: false,
-        description: 'The number of entries returned per query',
-        example: 10,
-    }),
-    (0, swagger_1.ApiQuery)({
-        name: 'page',
-        type: 'number',
-        required: false,
-        description: 'The position of the page number that you want the API to return',
-        example: 1,
-    }),
-    __param(0, (0, common_1.Query)('limit', new common_1.DefaultValuePipe(10), common_1.ParseIntPipe)),
-    __param(1, (0, common_1.Query)('page', new common_1.DefaultValuePipe(1), common_1.ParseIntPipe)),
+    __param(0, (0, common_1.Param)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, Number]),
+    __metadata("design:paramtypes", [get_users_param_dto_1.GetUsersParamDto]),
     __metadata("design:returntype", void 0)
-], UsersController.prototype, "getUsers", null);
+], UsersController.prototype, "getUserById", null);
 __decorate([
     (0, common_1.Post)(),
     (0, swagger_1.ApiOperation)({
@@ -94,13 +78,14 @@ __decorate([
             email: 'john.doe@example.com',
         },
     }),
+    (0, swagger_1.ApiBody)({ type: create_user_dto_1.CreateUserDto }),
     (0, common_1.UseInterceptors)(common_1.ClassSerializerInterceptor),
     (0, auth_decorator_1.Auth)(auth_type_enum_1.AuthType.None),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [create_user_dto_1.CreateUserDto]),
     __metadata("design:returntype", void 0)
-], UsersController.prototype, "createUsers", null);
+], UsersController.prototype, "createUser", null);
 __decorate([
     (0, common_1.Post)('create-many'),
     (0, swagger_1.ApiOperation)({

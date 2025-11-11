@@ -17,11 +17,10 @@ class GetUsersParamDto {
 }
 exports.GetUsersParamDto = GetUsersParamDto;
 __decorate([
-    (0, swagger_1.ApiPropertyOptional)({
+    (0, swagger_1.ApiProperty)({
         description: 'Get user with a specific id',
-        example: 10,
+        example: 1,
     }),
-    (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsInt)(),
     (0, class_transformer_1.Type)(() => Number),
     __metadata("design:type", Number)

@@ -34,10 +34,9 @@ let UsersService = class UsersService {
     async createUser(createUserDto) {
         return await this.createUserProvider.createUser(createUserDto);
     }
-    async findAll(limit, page) {
-        return await this.usersRepository.find({
-            take: limit,
-            skip: (page - 1) * limit,
+    async find(getUsersParamDto) {
+        return this.usersRepository.find({
+            where: getUsersParamDto,
         });
     }
     async findOneById(id) {

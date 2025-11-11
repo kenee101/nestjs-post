@@ -8,6 +8,7 @@ import { FindOneUserByEmailProvider } from './find-one-user-by-email.provider';
 import { FindOneByGoogleIdProvider } from './find-one-by-google-id.provider';
 import { CreateGoogleUserProvider } from './create-google-user.provider';
 import { GoogleUser } from '../interfaces/google-user.inerface';
+import { GetUsersParamDto } from '../dtos/get-users-param.dto';
 export declare class UsersService {
     private usersRepository;
     private readonly usersCreateManyProvider;
@@ -17,7 +18,7 @@ export declare class UsersService {
     private readonly createGooogleUserProvider;
     constructor(usersRepository: Repository<User>, usersCreateManyProvider: UsersCreateManyProvider, createUserProvider: CreateUserProvider, findOneUserByEmailProvider: FindOneUserByEmailProvider, findOneByGoogleIdProvider: FindOneByGoogleIdProvider, createGooogleUserProvider: CreateGoogleUserProvider);
     createUser(createUserDto: CreateUserDto): Promise<User>;
-    findAll(limit: number, page: number): Promise<User[]>;
+    find(getUsersParamDto: GetUsersParamDto): Promise<User[]>;
     findOneById(id: number): Promise<any>;
     createMany(createManyUsersDto: CreateManyUsersDto): Promise<User[]>;
     findOneByEmail(email: string): Promise<User>;

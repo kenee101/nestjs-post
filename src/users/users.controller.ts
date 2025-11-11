@@ -10,12 +10,19 @@ import {
   DefaultValuePipe,
   UseInterceptors,
   ClassSerializerInterceptor,
+  Delete,
 } from '@nestjs/common';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { GetUsersParamDto } from './dtos/get-users-param.dto';
 import { PatchUserDto } from './dtos/patch-user.dto';
 import { UsersService } from './providers/users.service';
-import { ApiTags, ApiQuery, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiQuery,
+  ApiOperation,
+  ApiResponse,
+  ApiBody,
+} from '@nestjs/swagger';
 import { CreateManyUsersDto } from './dtos/create-many-users.dto';
 import { AccessTokenGuard } from 'src/auth/guards/access-token/access-token.guard';
 import { Auth } from 'src/auth/decorators/auth.decorator';
@@ -30,46 +37,44 @@ export class UsersController {
     private readonly usersService: UsersService,
   ) {}
 
-  @Get()
+  @Get('/:id')
   @UseInterceptors(ClassSerializerInterceptor)
   @ApiOperation({
-    summary: 'Fetches a list of registered users on the application',
+    summary: 'Fetch registered user on the application',
   })
   @ApiResponse({
     status: 200,
-    description: 'Users fetched successfully based on the query',
-    type: [User],
-    example: [
-      {
-        id: 1,
-        firstName: 'John',
-        lastName: 'Doe',
-        email: 'john.doe@example.com',
-      },
-    ],
+    description: 'User fetched successfully based on the query',
+    type: User,
+    example: {
+      id: 1,
+      firstName: 'John',
+      lastName: 'Doe',
+      email: 'john.doe@example.com',
+    },
   })
-  @ApiQuery({
-    name: 'limit',
-    type: 'number',
-    required: false,
-    description: 'The number of entries returned per query',
-    example: 10,
-  })
-  @ApiQuery({
-    name: 'page',
-    type: 'number',
-    required: false,
-    description:
-      'The position of the page number that you want the API to return',
-    example: 1,
-  })
-  public getUsers(
-    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
-    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
+  // @ApiQuery({
+  //   name: 'limit',
+  //   type: 'number',
+  //   required: false,
+  //   description: 'The number of entries returned per query',
+  //   example: 10,
+  // })
+  // @ApiQuery({
+  //   name: 'page',
+  //   type: 'number',
+  //   required: false,
+  //   description:
+  //     'The position of the page number that you want the API to return',
+  //   example: 1,
+  // })
+  public getUserById(
+    @Param() getUsersParamDto: GetUsersParamDto,
+    // @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
+    // @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
   ) {
-    // console.log('limit', limit);
-    // console.log('page', page);
-    return this.usersService.findAll(limit, page);
+    return this.usersService.find(getUsersParamDto);
+    // return this.usersService.findAll(getUsersParamDto, limit, page);
   }
 
   @Post()
@@ -87,9 +92,10 @@ export class UsersController {
       email: 'john.doe@example.com',
     },
   })
+  @ApiBody({ type: CreateUserDto })
   @UseInterceptors(ClassSerializerInterceptor)
   @Auth(AuthType.None)
-  public createUsers(@Body() createUserDto: CreateUserDto) {
+  public createUser(@Body() createUserDto: CreateUserDto) {
     return this.usersService.createUser(createUserDto);
   }
 

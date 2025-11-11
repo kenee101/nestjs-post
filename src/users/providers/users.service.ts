@@ -1,19 +1,19 @@
 import { CreateUserDto } from './../dtos/create-user.dto';
 import { DataSource, Repository } from 'typeorm';
-import { GetUsersParamDto } from '../dtos/get-users-param.dto';
+// import { GetUsersParamDto } from '../dtos/get-users-param.dto';
 import {
   BadRequestException,
-  HttpException,
-  HttpStatus,
-  Inject,
+  // HttpException,
+  // HttpStatus,
+  // Inject,
   Injectable,
   RequestTimeoutException,
-  forwardRef,
+  // forwardRef,
 } from '@nestjs/common';
 import { User } from '../user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ConfigService, ConfigType } from '@nestjs/config';
-import profileConfig from '../config/profile.config';
+// import { ConfigService, ConfigType } from '@nestjs/config';
+// import profileConfig from '../config/profile.config';
 import { UsersCreateManyProvider } from './users-create-many.provider';
 import { CreateManyUsersDto } from '../dtos/create-many-users.dto';
 import { CreateUserProvider } from './create-user.provider';
@@ -21,6 +21,7 @@ import { FindOneUserByEmailProvider } from './find-one-user-by-email.provider';
 import { FindOneByGoogleIdProvider } from './find-one-by-google-id.provider';
 import { CreateGoogleUserProvider } from './create-google-user.provider';
 import { GoogleUser } from '../interfaces/google-user.inerface';
+import { GetUsersParamDto } from '../dtos/get-users-param.dto';
 
 /**
  * Controller class for '/users' API endpoint
@@ -68,23 +69,22 @@ export class UsersService {
   /**
    * Public method responsible for handling GET request for '/users' endpoint
    */
-  public async findAll(limit: number, page: number) {
-    return await this.usersRepository.find({
-      take: limit,
-      skip: (page - 1) * limit,
+  public async find(
+    getUsersParamDto: GetUsersParamDto,
+    // limit: number,
+    // page: number,
+  ) {
+    return this.usersRepository.find({
+      where: getUsersParamDto,
+      // take: limit,
+      // skip: (page - 1) * limit,
     });
-
-    // return this.usersRepository.find({
-    //   where: getUserParamDto,
-    //   take: limit,
-    //   skip: (page - 1) * limit,
-    // });
     // throw new HttpException(
     //   {
     //     status: HttpStatus.MOVED_PERMANENTLY,
     //     error: 'The API endpoint does not exist',
     //     fileName: 'users.service.ts',
-    //     lineNumber: 88,
+    //     lineNumber: 87,
     //   },
     //   HttpStatus.MOVED_PERMANENTLY,
     //   {
