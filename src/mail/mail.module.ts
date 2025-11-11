@@ -21,7 +21,7 @@ import { join } from 'path';
           },
         },
         defaults: {
-          from: `"My Blog" <no-repy@nestjs-blog.com>`,
+          from: `"My Posts" <no-repy@nestjs-post.com>`,
         },
         template: {
           dir: join(__dirname, 'templates'),

@@ -3,7 +3,10 @@ import { Body, Controller, Post } from '@nestjs/common';
 import { GoogleTokenDto } from './dtos/google-token.dto';
 import { Auth } from '../decorators/auth.decorator';
 import { AuthType } from '../enums/auth-type.enum';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Authentication')
+@ApiBearerAuth()
 @Auth(AuthType.None)
 @Controller('auth/google-authentication')
 export class GoogleAuthenticationController {

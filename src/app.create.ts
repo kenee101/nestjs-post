@@ -32,11 +32,34 @@ export function appCreate(app: INestApplication): void {
     )
     .addServer('http://localhost:3000')
     .setVersion('1.0')
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        name: 'Authorization',
+        description: 'Enter JWT token',
+        in: 'header',
+      },
+      'access-token' // This must match the name used in your AccessTokenGuard
+    )
+    .addSecurityRequirements('access-token') // This ensures the padlock appears
     .build();
 
   // Instantiate Document
   const document = SwaggerModule.createDocument(app, swaggerConfig);
-  SwaggerModule.setup('api', app, document);
+
+  // Setup Swagger UI with security options
+  SwaggerModule.setup('api', app, document, {
+    swaggerOptions: {
+      persistAuthorization: true,
+      security: [
+        {
+          'JWT-auth': [],
+        },
+      ],
+    },
+  });
 
   /*
    * Setup AWS SDK used for uploadingg files to AWS S3
