@@ -1,0 +1,104 @@
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.PostsService = void 0;
+const common_1 = require("@nestjs/common");
+const typeorm_1 = require("typeorm");
+const post_entity_1 = require("../post.entity");
+const typeorm_2 = require("@nestjs/typeorm");
+const meta_option_entity_1 = require("../../meta-options/meta-option.entity");
+const tags_service_1 = require("../../tags/providers/tags.service");
+const pagination_provider_1 = require("../../common/pagination/providers/pagination.provider");
+const create_post_provider_1 = require("./create-post.provider");
+let PostsService = class PostsService {
+    constructor(postsRepository, metaOptionsRepository, tagsService, paginationProvider, createPostProvider) {
+        this.postsRepository = postsRepository;
+        this.metaOptionsRepository = metaOptionsRepository;
+        this.tagsService = tagsService;
+        this.paginationProvider = paginationProvider;
+        this.createPostProvider = createPostProvider;
+    }
+    async create(createPostDto, user) {
+        return await this.createPostProvider.create(createPostDto, user);
+    }
+    async findAll(postQuery, userId) {
+        let posts = await this.paginationProvider.paginateQuery({
+            limit: postQuery.limit,
+            page: postQuery.page,
+        }, this.postsRepository);
+        return posts;
+    }
+    async update(patchPostDto) {
+        let tags = undefined;
+        let post = undefined;
+        try {
+            tags = await this.tagsService.findMultipleTags(patchPostDto.tags);
+        }
+        catch (error) {
+            throw new common_1.RequestTimeoutException('Unable to process your request at the moment please try later', {
+                description: 'Error connecting to the database',
+            });
+        }
+        if (!tags || tags.length !== patchPostDto.tags.length) {
+            throw new common_1.BadRequestException('Please check your tag Ids and ensure they are correct');
+        }
+        try {
+            post = await this.postsRepository.findOneBy({
+                id: patchPostDto.id,
+            });
+        }
+        catch (error) {
+            throw new common_1.RequestTimeoutException('Unable to process your request at the moment please try later', {
+                description: 'Error connecting to the database',
+            });
+        }
+        if (!post) {
+            throw new common_1.BadRequestException('The post Id does not exist');
+        }
+        post.title = patchPostDto.title ?? post.title;
+        post.content = patchPostDto.content ?? post.content;
+        post.status = patchPostDto.status ?? post.status;
+        post.postType = patchPostDto.postType ?? post.postType;
+        post.slug = patchPostDto.slug ?? post.slug;
+        post.featuredImageUrl =
+            patchPostDto.featuredImageUrl ?? post.featuredImageUrl;
+        post.publishOn = patchPostDto.publishOn ?? post.publishOn;
+        post.tags = tags;
+        try {
+            await this.postsRepository.save(post);
+        }
+        catch (error) {
+            throw new common_1.RequestTimeoutException('Unable to process your request at the moment please try later', {
+                description: 'Error connecting to the database',
+            });
+        }
+        return post;
+    }
+    async delete(id) {
+        await this.postsRepository.delete(id);
+        return { deleted: true, id };
+    }
+};
+exports.PostsService = PostsService;
+exports.PostsService = PostsService = __decorate([
+    (0, common_1.Injectable)(),
+    __param(0, (0, typeorm_2.InjectRepository)(post_entity_1.Post)),
+    __param(1, (0, typeorm_2.InjectRepository)(meta_option_entity_1.MetaOption)),
+    __metadata("design:paramtypes", [typeorm_1.Repository,
+        typeorm_1.Repository,
+        tags_service_1.TagsService,
+        pagination_provider_1.PaginationProvider,
+        create_post_provider_1.CreatePostProvider])
+], PostsService);
+//# sourceMappingURL=posts.service.js.map
