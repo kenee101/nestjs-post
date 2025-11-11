@@ -20,6 +20,7 @@ import { CreateManyUsersDto } from './dtos/create-many-users.dto';
 import { AccessTokenGuard } from 'src/auth/guards/access-token/access-token.guard';
 import { Auth } from 'src/auth/decorators/auth.decorator';
 import { AuthType } from 'src/auth/enums/auth-type.enum';
+import { User } from './user.entity';
 
 @Controller('users')
 @ApiTags('Users')
@@ -29,14 +30,23 @@ export class UsersController {
     private readonly usersService: UsersService,
   ) {}
 
-  // @Get('/:id?')
   @Get()
+  @UseInterceptors(ClassSerializerInterceptor)
   @ApiOperation({
     summary: 'Fetches a list of registered users on the application',
   })
   @ApiResponse({
     status: 200,
     description: 'Users fetched successfully based on the query',
+    type: [User],
+    example: [
+      {
+        id: 1,
+        firstName: 'John',
+        lastName: 'Doe',
+        email: 'john.doe@example.com',
+      },
+    ],
   })
   @ApiQuery({
     name: 'limit',
@@ -54,15 +64,29 @@ export class UsersController {
     example: 1,
   })
   public getUsers(
-    @Param() getUserParamDto: GetUsersParamDto,
     @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
   ) {
-    return this.usersService.findAll(getUserParamDto, limit, page);
+    // console.log('limit', limit);
+    // console.log('page', page);
+    return this.usersService.findAll(limit, page);
   }
 
   @Post()
   // @SetMetadata('authType', 'none')
+  @ApiOperation({
+    summary: 'Creates a new user',
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'User created successfully',
+    example: {
+      id: 1,
+      firstName: 'John',
+      lastName: 'Doe',
+      email: 'john.doe@example.com',
+    },
+  })
   @UseInterceptors(ClassSerializerInterceptor)
   @Auth(AuthType.None)
   public createUsers(@Body() createUserDto: CreateUserDto) {
@@ -70,11 +94,37 @@ export class UsersController {
   }
 
   @Post('create-many')
+  @ApiOperation({
+    summary: 'Creates multiple users',
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'Users created successfully',
+    example: {
+      id: 1,
+      firstName: 'John',
+      lastName: 'Doe',
+      email: 'john.doe@example.com',
+    },
+  })
   public createManyUsers(@Body() createManyUsersDto: CreateManyUsersDto) {
     return this.usersService.createMany(createManyUsersDto);
   }
 
   @Patch()
+  @ApiOperation({
+    summary: 'Update a user',
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'User updated successfully',
+    example: {
+      id: 1,
+      firstName: 'John',
+      lastName: 'Doe',
+      email: 'john.doe@example.com',
+    },
+  })
   public patchUser(@Body() patchUserDto: PatchUserDto) {
     return patchUserDto;
   }

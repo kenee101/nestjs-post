@@ -19,7 +19,7 @@ exports.GetUsersParamDto = GetUsersParamDto;
 __decorate([
     (0, swagger_1.ApiPropertyOptional)({
         description: 'Get user with a specific id',
-        example: 1234,
+        example: 10,
     }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsInt)(),

@@ -15,12 +15,12 @@ function appCreate(app) {
         },
     }));
     const swaggerConfig = new swagger_1.DocumentBuilder()
-        .setTitle('NestJs Implementation of a Posts API')
+        .setTitle('NestJs Implementation of Posts API')
         .setDescription('Use the base API URL as http://localhost:3000')
         .setTermsOfService('http://localhost:3000/terms-of-service')
         .setLicense('MIT License', 'https://github.com/git/git-scm.com/blob/main/MIT-LICENSE.txt')
-        .addServer('http://localhost:3000')
         .addServer('https://nestjs-post-production.up.railway.app/')
+        .addServer('http://localhost:3000')
         .setVersion('1.0')
         .addBearerAuth({
         type: 'http',

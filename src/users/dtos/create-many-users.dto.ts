@@ -9,7 +9,12 @@ export class CreateManyUsersDto {
     type: 'array',
     required: true,
     items: {
-      type: 'User',
+      type: 'object',
+      properties: {
+        firstName: { type: 'string' },
+        lastName: { type: 'string' },
+        email: { type: 'string' },
+      },
     },
   })
   @IsNotEmpty()

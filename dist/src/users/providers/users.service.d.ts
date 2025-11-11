@@ -1,6 +1,5 @@
 import { CreateUserDto } from './../dtos/create-user.dto';
 import { Repository } from 'typeorm';
-import { GetUsersParamDto } from '../dtos/get-users-param.dto';
 import { User } from '../user.entity';
 import { UsersCreateManyProvider } from './users-create-many.provider';
 import { CreateManyUsersDto } from '../dtos/create-many-users.dto';
@@ -18,7 +17,7 @@ export declare class UsersService {
     private readonly createGooogleUserProvider;
     constructor(usersRepository: Repository<User>, usersCreateManyProvider: UsersCreateManyProvider, createUserProvider: CreateUserProvider, findOneUserByEmailProvider: FindOneUserByEmailProvider, findOneByGoogleIdProvider: FindOneByGoogleIdProvider, createGooogleUserProvider: CreateGoogleUserProvider);
     createUser(createUserDto: CreateUserDto): Promise<User>;
-    findAll(getUserParamDto: GetUsersParamDto, limt: number, page: number): void;
+    findAll(limit: number, page: number): Promise<User[]>;
     findOneById(id: number): Promise<any>;
     createMany(createManyUsersDto: CreateManyUsersDto): Promise<User[]>;
     findOneByEmail(email: string): Promise<User>;

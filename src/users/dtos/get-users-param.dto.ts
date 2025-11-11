@@ -6,7 +6,7 @@ import { Type } from 'class-transformer';
 export class GetUsersParamDto {
   @ApiPropertyOptional({
     description: 'Get user with a specific id',
-    example: 1234,
+    example: 10,
   })
   @IsOptional()
   @IsInt()

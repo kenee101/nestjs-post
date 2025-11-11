@@ -68,24 +68,30 @@ export class UsersService {
   /**
    * Public method responsible for handling GET request for '/users' endpoint
    */
-  public findAll(
-    getUserParamDto: GetUsersParamDto,
-    limt: number,
-    page: number,
-  ) {
-    throw new HttpException(
-      {
-        status: HttpStatus.MOVED_PERMANENTLY,
-        error: 'The API endpoint does not exist',
-        fileName: 'users.service.ts',
-        lineNumber: 88,
-      },
-      HttpStatus.MOVED_PERMANENTLY,
-      {
-        cause: new Error(),
-        description: 'Occured because the API endpoint was permanently moved',
-      },
-    );
+  public async findAll(limit: number, page: number) {
+    return await this.usersRepository.find({
+      take: limit,
+      skip: (page - 1) * limit,
+    });
+
+    // return this.usersRepository.find({
+    //   where: getUserParamDto,
+    //   take: limit,
+    //   skip: (page - 1) * limit,
+    // });
+    // throw new HttpException(
+    //   {
+    //     status: HttpStatus.MOVED_PERMANENTLY,
+    //     error: 'The API endpoint does not exist',
+    //     fileName: 'users.service.ts',
+    //     lineNumber: 88,
+    //   },
+    //   HttpStatus.MOVED_PERMANENTLY,
+    //   {
+    //     cause: new Error(),
+    //     description: 'Occured because the API endpoint was permanently moved',
+    //   },
+    // );
   }
 
   /**

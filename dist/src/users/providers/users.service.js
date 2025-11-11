@@ -34,15 +34,10 @@ let UsersService = class UsersService {
     async createUser(createUserDto) {
         return await this.createUserProvider.createUser(createUserDto);
     }
-    findAll(getUserParamDto, limt, page) {
-        throw new common_1.HttpException({
-            status: common_1.HttpStatus.MOVED_PERMANENTLY,
-            error: 'The API endpoint does not exist',
-            fileName: 'users.service.ts',
-            lineNumber: 88,
-        }, common_1.HttpStatus.MOVED_PERMANENTLY, {
-            cause: new Error(),
-            description: 'Occured because the API endpoint was permanently moved',
+    async findAll(limit, page) {
+        return await this.usersRepository.find({
+            take: limit,
+            skip: (page - 1) * limit,
         });
     }
     async findOneById(id) {

@@ -22,7 +22,12 @@ __decorate([
         type: 'array',
         required: true,
         items: {
-            type: 'User',
+            type: 'object',
+            properties: {
+                firstName: { type: 'string' },
+                lastName: { type: 'string' },
+                email: { type: 'string' },
+            },
         },
     }),
     (0, class_validator_1.IsNotEmpty)(),
