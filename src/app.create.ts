@@ -23,7 +23,7 @@ export function appCreate(app: INestApplication): void {
    * swagger configuration
    */
   const swaggerConfig = new DocumentBuilder()
-    .setTitle('NestJs Implementation of a Posts API')
+    .setTitle('NestJs Implementation of Posts API')
     .setDescription('Use the base API URL as http://localhost:3000')
     .setTermsOfService('http://localhost:3000/terms-of-service')
     .setLicense(
