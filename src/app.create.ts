@@ -30,6 +30,7 @@ export function appCreate(app: INestApplication): void {
       'MIT License',
       'https://github.com/git/git-scm.com/blob/main/MIT-LICENSE.txt',
     )
+    .addServer('https://nestjs-post-production.up.railway.app/')
     .addServer('http://localhost:3000')
     .setVersion('1.0')
     .addBearerAuth(
@@ -41,7 +42,7 @@ export function appCreate(app: INestApplication): void {
         description: 'Enter JWT token',
         in: 'header',
       },
-      'access-token' // This must match the name used in your AccessTokenGuard
+      'access-token', // This must match the name used in your AccessTokenGuard
     )
     .addSecurityRequirements('access-token') // This ensures the padlock appears
     .build();

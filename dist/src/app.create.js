@@ -20,6 +20,7 @@ function appCreate(app) {
         .setTermsOfService('http://localhost:3000/terms-of-service')
         .setLicense('MIT License', 'https://github.com/git/git-scm.com/blob/main/MIT-LICENSE.txt')
         .addServer('http://localhost:3000')
+        .addServer('https://nestjs-post-production.up.railway.app/')
         .setVersion('1.0')
         .addBearerAuth({
         type: 'http',
